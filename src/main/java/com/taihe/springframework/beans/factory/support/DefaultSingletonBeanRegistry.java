@@ -2,8 +2,8 @@ package com.taihe.springframework.beans.factory.support;
 
 import com.taihe.springframework.beans.factory.config.SingletonBeanRegistry;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author qinth
@@ -11,7 +11,7 @@ import java.util.Map;
  **/
 public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
-    private final Map<String, Object> singletonObjects = new HashMap<>();
+    private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
 
     @Override
     public Object getSingleton(String beanName) {

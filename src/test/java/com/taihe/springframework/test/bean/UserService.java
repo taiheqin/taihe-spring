@@ -6,28 +6,27 @@ package com.taihe.springframework.test.bean;
  **/
 public class UserService {
 
-    private String name;
+    private String id;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public UserService(String name) {
-        this.name = name;
-    }
+    private UserDao userDao;
 
     public void queryService() {
-        System.out.printf("query %s's info%n", name);
+        System.out.println(String.format("query %s's info: %s", id, userDao.queryUserName(id)));
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder stringBuilder = new StringBuilder("");
-        stringBuilder.append(name);
-        return stringBuilder.toString();
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public UserDao getUserDao() {
+        return userDao;
+    }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }

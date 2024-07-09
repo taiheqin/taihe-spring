@@ -3,8 +3,8 @@ package com.taihe.springframework.beans.factory.support;
 import com.taihe.springframework.BeansException;
 import com.taihe.springframework.beans.factory.config.BeanDefinition;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author qinth
@@ -12,7 +12,7 @@ import java.util.Map;
  **/
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry {
 
-    private final Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
+    private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
 
     @Override
     protected BeanDefinition getBeanDefinition(String beanName) throws BeansException {
