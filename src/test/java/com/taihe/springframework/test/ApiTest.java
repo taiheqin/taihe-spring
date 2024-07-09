@@ -27,18 +27,19 @@ public class ApiTest {
         beanFactory.registryBeanDefinition("userService", beanDefinition);
 
         // 3.get bean
-        UserService userService = (UserService) beanFactory.getBean("userService");
+        //UserService userService = (UserService) beanFactory.getBean("userService");
+        //userService.queryService();
+        UserService userService = (UserService) beanFactory.getBean("userService", "taihe");
         userService.queryService();
 
         // 4.get bean again and compare
-        Object userServiceGetFromFactoryAgain = beanFactory.getBean("userService");
-        System.out.println(String.format("userService: '%s' \n" +
+        Object userServiceGetFromFactoryAgain = beanFactory.getBean("userService", "taiheqin");
+        System.out.printf(String.format("userService: '%s' \n" +
                         "userServiceGetFromFactoryAgain: '%s'\n" +
                         "userService equals userServiceGetFromFactoryAgain: %s",
                 userService,
                 userServiceGetFromFactoryAgain,
                 Objects.equals(userService, userServiceGetFromFactoryAgain)));
-
 
     }
 }
