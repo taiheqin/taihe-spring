@@ -10,7 +10,7 @@ public class UserService {
 
     private UserDao userDao;
 
-    public void queryService() {
+    public void queryUserInfo() {
         System.out.println(String.format("query %s's info: %s", id, userDao.queryUserName(id)));
     }
 

@@ -1,5 +1,6 @@
 package com.taihe.springframework.beans.factory.support;
 
+import com.taihe.springframework.BeansException;
 import com.taihe.springframework.beans.factory.config.BeanDefinition;
 
 /**
@@ -8,5 +9,11 @@ import com.taihe.springframework.beans.factory.config.BeanDefinition;
  **/
 public interface BeanDefinitionRegistry {
 
-    void registryBeanDefinition(String beanName, BeanDefinition beanDefinition);
+    void registerBeanDefinition(String beanName, BeanDefinition beanDefinition);
+
+    BeanDefinition getBeanDefinition(String beanName) throws BeansException;
+
+    boolean containsBeanDefinition(String beanName);
+
+    String[] getBeanDefinitionNames();
 }
