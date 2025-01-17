@@ -1,6 +1,4 @@
-package com.taihe.springframework;
-
-import com.taihe.springframework.beans.factory.config.BeanDefinition;
+package com.taihe.springframework.beans;
 
 /**
  * @author qinth

@@ -1,10 +1,6 @@
 package com.taihe.springframework.beans.factory;
 
-import com.taihe.springframework.BeansException;
-import com.taihe.springframework.beans.factory.config.BeanDefinition;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.taihe.springframework.beans.BeansException;
 
 /**
  * @author qinth

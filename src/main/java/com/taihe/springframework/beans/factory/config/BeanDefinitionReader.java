@@ -1,6 +1,6 @@
 package com.taihe.springframework.beans.factory.config;
 
-import com.taihe.springframework.BeansException;
+import com.taihe.springframework.beans.BeansException;
 import com.taihe.springframework.beans.factory.support.BeanDefinitionRegistry;
 import com.taihe.springframework.core.io.Resource;
 import com.taihe.springframework.core.io.ResourceLoader;

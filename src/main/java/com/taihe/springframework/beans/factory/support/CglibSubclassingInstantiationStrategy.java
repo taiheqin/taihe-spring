@@ -1,6 +1,6 @@
 package com.taihe.springframework.beans.factory.support;
 
-import com.taihe.springframework.BeansException;
+import com.taihe.springframework.beans.BeansException;
 import com.taihe.springframework.beans.factory.config.BeanDefinition;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;

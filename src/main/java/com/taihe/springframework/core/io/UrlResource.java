@@ -1,6 +1,6 @@
 package com.taihe.springframework.core.io;
 
-import com.taihe.springframework.BeansException;
+import com.taihe.springframework.beans.BeansException;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,6 +1,6 @@
 package com.taihe.springframework.beans.factory.support;
 
-import com.taihe.springframework.BeansException;
+import com.taihe.springframework.beans.BeansException;
 import com.taihe.springframework.beans.PropertyValue;
 import com.taihe.springframework.beans.PropertyValues;
 import com.taihe.springframework.beans.factory.config.BeanDefinition;

@@ -1,4 +1,4 @@
-package com.taihe.springframework.beans.utils;
+package com.taihe.utils;
 
 public class ClassUtils {
 

@@ -1,10 +1,7 @@
 package com.taihe.springframework.beans.factory.config;
 
-import com.taihe.springframework.BeansException;
-import com.taihe.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import com.taihe.springframework.beans.factory.support.BeanDefinitionRegistry;
 import com.taihe.springframework.core.io.DefaultResourceLoader;
-import com.taihe.springframework.core.io.Resource;
 import com.taihe.springframework.core.io.ResourceLoader;
 
 /**

@@ -3,7 +3,7 @@ package com.taihe.springframework.beans.factory.xml;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
-import com.taihe.springframework.BeansException;
+import com.taihe.springframework.beans.BeansException;
 import com.taihe.springframework.beans.PropertyValue;
 import com.taihe.springframework.beans.factory.config.AbstractBeanDefinitionReader;
 import com.taihe.springframework.beans.factory.config.BeanDefinition;
