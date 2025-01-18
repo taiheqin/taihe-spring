@@ -7,6 +7,7 @@ import com.taihe.springframework.beans.factory.BeanFactory;
 import com.taihe.springframework.beans.factory.config.BeanReference;
 import com.taihe.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.taihe.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import com.taihe.springframework.context.support.ClassPathXmlApplicationContext;
 import com.taihe.springframework.test.bean.UserDao;
 import com.taihe.springframework.test.bean.UserService;
 import org.junit.Test;
@@ -45,7 +46,6 @@ public class ApiTest {
         userService.queryUserInfo();
 
 
-
     }
 
     @Test
@@ -59,6 +59,17 @@ public class ApiTest {
 
         // 3. 获取Bean对象调用方法
         UserService userService = (UserService) beanFactory.getBean("userService", UserService.class);
-         userService.queryUserInfo();
+        userService.queryUserInfo();
+    }
+
+    @Test
+    public void testContext() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:springContext.xml");
+
+        // 2. 获取Bean对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        userService.queryUserInfo();
+
     }
 }
