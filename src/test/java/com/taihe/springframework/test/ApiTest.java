@@ -72,4 +72,16 @@ public class ApiTest {
         userService.queryUserInfo();
 
     }
+
+    @Test
+    public void testInitAndDestroy() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:initAndDestroy.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取Bean对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        userService.queryUserInfo();
+
+    }
 }

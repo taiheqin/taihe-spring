@@ -1,8 +1,11 @@
 package com.taihe.springframework.beans.factory.support;
 
+import cn.hutool.core.util.StrUtil;
 import com.taihe.springframework.beans.BeansException;
 import com.taihe.springframework.beans.PropertyValue;
 import com.taihe.springframework.beans.PropertyValues;
+import com.taihe.springframework.beans.factory.DisposableBean;
+import com.taihe.springframework.beans.factory.InitializingBean;
 import com.taihe.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.taihe.springframework.beans.factory.config.BeanDefinition;
 import com.taihe.springframework.beans.factory.config.BeanPostProcessor;
@@ -11,6 +14,7 @@ import com.taihe.springframework.beans.factory.config.BeanReference;
 import javax.naming.InitialContext;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
@@ -25,8 +29,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
         Object bean = null;
         try {
+            // create the bean
             bean = createBeanInstance(beanDefinition, beanName, args);
 
+            // fill bean's properties
             applyPropertyValue(beanName, bean, beanDefinition);
 
             bean = initializeBean(beanName, bean, beanDefinition);
@@ -34,15 +40,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             throw new BeansException(String.format("Instantiation of bean[%s] failed", beanName), e);
         }
 
+        registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
+
         addSingleton(beanName, bean);
         return bean;
     }
 
-    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+    private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
         // 1. deal BeanPostProcessor Before
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 
-        // todo：invokeInitMethods(beanName, wrappedBean, beanDefinition);
+        // invoke init methods
         invokeInitMethods(beanName, wrappedBean, beanDefinition);
 
         // 2. 执行 BeanPostProcessor After 处理
@@ -50,8 +58,30 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return wrappedBean;
     }
 
-    private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
+    /**
+     * invoke afterPropertiesSet() and reflect the init-method in beanDefinitions
+     *
+     * @param beanName       bean's name
+     * @param bean           the object of bean
+     * @param beanDefinition bean's definitions
+     * @throws Exception could not find init-method or invoke exception
+     */
+    private void invokeInitMethods(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {
+        // invoke afterPropertiesSet()
+        if (bean instanceof InitializingBean) {
+            ((InitializingBean) bean).afterPropertiesSet();
+        }
 
+        // invoke function named init-method
+        String initMethodName = beanDefinition.getInitMethodName();
+        if (StrUtil.isNotBlank(initMethodName)) {
+            Method initMethod = beanDefinition.getBeanClass().getMethod(initMethodName);
+            if (Objects.isNull(initMethod)) {
+                throw new BeansException("Could not find an init method named '" + initMethodName
+                        + "' on bean with name '" + beanName + "'");
+            }
+            initMethod.invoke(bean);
+        }
     }
 
     protected Object createBeanInstance(BeanDefinition beanDefinition, String beanName, Object[] args) {
@@ -146,5 +176,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             }
         }
         return existingBean;
+    }
+
+    protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
+            registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+        }
     }
 }

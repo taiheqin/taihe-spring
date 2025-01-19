@@ -1,10 +1,13 @@
 package com.taihe.springframework.test.bean;
 
+import com.taihe.springframework.beans.factory.DisposableBean;
+import com.taihe.springframework.beans.factory.InitializingBean;
+
 /**
  * @author qinth
  * @since 2024/7/8 15:54
  **/
-public class UserService {
+public class UserService implements InitializingBean, DisposableBean {
 
     private String id;
 
@@ -16,9 +19,19 @@ public class UserService {
     private UserDao userDao;
 
     public void queryUserInfo() {
-        System.out.println(String.format("------------query %s's info------\n " +
-                        "name: %s, company: %s, location: %s",
-                id, userDao.queryUserName(id), company, location));
+        System.out.printf("------------query %s's info------\n " +
+                        "name: %s, company: %s, location: %s%n",
+                id, userDao.queryUserName(id), company, location);
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("----------- UserService.destroy");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("----------- UserService.afterPropertiesSet");
     }
 
     public String getId() {
