@@ -5,6 +5,7 @@ import com.taihe.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.taihe.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import com.taihe.springframework.beans.factory.config.BeanPostProcessor;
 import com.taihe.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.taihe.springframework.context.ApplicationContextAwareProcessor;
 import com.taihe.springframework.context.ConfigurableApplicationContext;
 import com.taihe.springframework.core.io.DefaultResourceLoader;
 
@@ -23,6 +24,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
         // get bean factory
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
+
+        // add ApplicationContextAwareProcessor. Make beans that inherit from ApplicationContextAware aware of their owning ApplicationContext
+        beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 
         // Invoke factory processors registered as beans in the context.
         invokeBeanFactoryPostProcessors(beanFactory);

@@ -3,7 +3,6 @@ package com.taihe.springframework.test;
 import com.taihe.springframework.beans.PropertyValue;
 import com.taihe.springframework.beans.PropertyValues;
 import com.taihe.springframework.beans.factory.config.BeanDefinition;
-import com.taihe.springframework.beans.factory.BeanFactory;
 import com.taihe.springframework.beans.factory.config.BeanReference;
 import com.taihe.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.taihe.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -11,8 +10,6 @@ import com.taihe.springframework.context.support.ClassPathXmlApplicationContext;
 import com.taihe.springframework.test.bean.UserDao;
 import com.taihe.springframework.test.bean.UserService;
 import org.junit.Test;
-
-import java.util.Objects;
 
 /**
  * @author qinth
@@ -75,6 +72,18 @@ public class ApiTest {
 
     @Test
     public void testInitAndDestroy() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:initAndDestroy.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取Bean对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        userService.queryUserInfo();
+
+    }
+
+    @Test
+    public void testAware() {
         // 1.初始化 BeanFactory
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:initAndDestroy.xml");
         applicationContext.registerShutdownHook();
