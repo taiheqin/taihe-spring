@@ -9,7 +9,9 @@ import com.taihe.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import com.taihe.springframework.context.support.ClassPathXmlApplicationContext;
 import com.taihe.springframework.test.bean.UserDao;
 import com.taihe.springframework.test.bean.UserService;
+import com.taihe.springframework.test.scope.ScopeUserService;
 import org.junit.Test;
+import org.openjdk.jol.info.ClassLayout;
 
 /**
  * @author qinth
@@ -92,5 +94,45 @@ public class ApiTest {
         UserService userService = applicationContext.getBean("userService", UserService.class);
         userService.queryUserInfo();
 
+    }
+
+    @Test
+    public void test_prototype() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:scope.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取Bean对象调用方法
+        ScopeUserService userService01 = applicationContext.getBean("userService", ScopeUserService.class);
+        ScopeUserService userService02 = applicationContext.getBean("userService", ScopeUserService.class);
+        System.out.println("---------------userService01");
+        userService01.queryUserInfo();
+        System.out.println("---------------userService02");
+        userService02.queryUserInfo();
+
+        System.out.println("---------------");
+        // 3. 配置 scope="prototype/singleton"
+        System.out.println(userService01);
+        System.out.println("---------------");
+        System.out.println(userService02);
+
+        // 4. 打印十六进制哈希
+        System.out.println("---------------");
+        System.out.println(userService01 + " 十六进制哈希：" + Integer.toHexString(userService01.hashCode()));
+        System.out.println("---------------");
+        System.out.println(ClassLayout.parseInstance(userService01).toPrintable());
+        System.out.println("-------------");
+
+    }
+
+    @Test
+    public void test_factory_bean() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:scope.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 调用代理方法
+        ScopeUserService userService = applicationContext.getBean("userService", ScopeUserService.class);
+        userService.queryUserInfo();
     }
 }

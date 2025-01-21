@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="userService" class="com.taihe.springframework.test.scope.ScopeUserService" scope="prototype">
+        <property name="id" value="10001"/>
+        <property name="company" value="tengxun"/>
+        <property name="location" value="shenzhen"/>
+        <property name="userDao" ref="proxyUserDao"/>
+    </bean>
+
+    <bean id="proxyUserDao" class="com.taihe.springframework.test.scope.ProxyBeanFactory"/>
+
+</beans>
