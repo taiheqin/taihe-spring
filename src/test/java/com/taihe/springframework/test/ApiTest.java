@@ -9,6 +9,7 @@ import com.taihe.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import com.taihe.springframework.context.support.ClassPathXmlApplicationContext;
 import com.taihe.springframework.test.bean.UserDao;
 import com.taihe.springframework.test.bean.UserService;
+import com.taihe.springframework.test.event.CustomEvent;
 import com.taihe.springframework.test.scope.ScopeUserService;
 import org.junit.Test;
 import org.openjdk.jol.info.ClassLayout;
@@ -134,5 +135,13 @@ public class ApiTest {
         // 2. 调用代理方法
         ScopeUserService userService = applicationContext.getBean("userService", ScopeUserService.class);
         userService.queryUserInfo();
+    }
+
+    @Test
+    public void test_event() {
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:event.xml");
+        applicationContext.publishEvent(new CustomEvent(applicationContext, 1019129009086763L, "成功了！"));
+
+        applicationContext.registerShutdownHook();
     }
 }
