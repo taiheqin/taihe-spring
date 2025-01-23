@@ -5,6 +5,7 @@ import com.taihe.springframework.aop.TargetSource;
 import com.taihe.springframework.aop.aspectj.AspectJExpressionPointcut;
 import com.taihe.springframework.aop.framework.Cglib2AopProxy;
 import com.taihe.springframework.aop.framework.JdkDynamicAopProxy;
+import com.taihe.springframework.context.support.ClassPathXmlApplicationContext;
 import com.taihe.springframework.test.bean.UserService;
 import org.junit.Test;
 
@@ -50,5 +51,12 @@ public class TestAop {
         UserServiceInterface proxy_cglib = (UserServiceInterface) new Cglib2AopProxy(advisedSupport).getProxy();
         // 测试调用
         System.out.println(proxy_cglib.register("he"));
+    }
+
+    @Test
+    public void test_aop_with_bean_lifecycle() {
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:aop.xml");
+        UserServiceInterface userService = applicationContext.getBean("userService", UserServiceInterface.class);
+        System.out.println("测试结果：" + userService.queryUserInfo());
     }
 }

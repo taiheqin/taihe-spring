@@ -50,7 +50,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
             return (T) getObjectForBeanInstance(sharedInstance, name);
         }
 
-        return (T) getObjectForBeanInstance(createBean(name, getBeanDefinition(name), args), name);
+        // means bean hasn't create
+        Object bean = createBean(name, getBeanDefinition(name), args);
+        return (T) getObjectForBeanInstance(bean, name);
     }
 
     private Object getObjectForBeanInstance(Object beanInstance, String beanName) {

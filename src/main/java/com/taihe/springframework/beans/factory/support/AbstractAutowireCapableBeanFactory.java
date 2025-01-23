@@ -6,10 +6,7 @@ import com.taihe.springframework.beans.BeansException;
 import com.taihe.springframework.beans.PropertyValue;
 import com.taihe.springframework.beans.PropertyValues;
 import com.taihe.springframework.beans.factory.*;
-import com.taihe.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import com.taihe.springframework.beans.factory.config.BeanDefinition;
-import com.taihe.springframework.beans.factory.config.BeanPostProcessor;
-import com.taihe.springframework.beans.factory.config.BeanReference;
+import com.taihe.springframework.beans.factory.config.*;
 
 import javax.naming.InitialContext;
 import java.lang.reflect.Constructor;
@@ -29,6 +26,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
         Object bean = null;
         try {
+            // check the bean be proxied
+            bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            if (Objects.nonNull(bean)) {
+                return bean;
+            }
+
             // create the bean
             bean = createBeanInstance(beanDefinition, beanName, args);
 
@@ -47,6 +50,26 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
 
         return bean;
+    }
+
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
+    protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) {
+                    return result;
+                }
+            }
+        }
+        return null;
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) throws Exception {

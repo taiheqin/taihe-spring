@@ -10,6 +10,11 @@ import org.aopalliance.intercept.MethodInterceptor;
 public class AdvisedSupport {
 
     /**
+     * ProxyConfig
+     */
+    private boolean proxyTargetClass = false;
+
+    /**
      * the object(TargetSource) been proxied
      */
     private TargetSource targetSource;
@@ -23,6 +28,15 @@ public class AdvisedSupport {
      * method matcher
      */
     private MethodMatcher methodMatcher;
+
+
+    public boolean isProxyTargetClass() {
+        return proxyTargetClass;
+    }
+
+    public void setProxyTargetClass(boolean proxyTargetClass) {
+        this.proxyTargetClass = proxyTargetClass;
+    }
 
     public TargetSource getTargetSource() {
         return targetSource;

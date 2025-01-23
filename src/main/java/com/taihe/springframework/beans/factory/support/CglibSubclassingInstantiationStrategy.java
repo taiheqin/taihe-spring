@@ -24,7 +24,12 @@ public class CglibSubclassingInstantiationStrategy implements InstantiationStrat
             }
         });
         if (ctor == null) {
-            return enhancer.create();
+            try {
+                ctor = beanDefinition.getBeanClass().getDeclaredConstructor();
+                return enhancer.create();
+            } catch (NoSuchMethodException e) {
+                throw new BeansException("No default constructor found for " + beanDefinition.getBeanClass().getName(), e);
+            }
         }
         return enhancer.create(ctor.getParameterTypes(), args);
     }
